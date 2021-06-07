@@ -43,7 +43,7 @@ async def new_project(ctx):
 
     new_project = Project(name = new_project_name.content, project_manager= project_manager.content, members = members.content, priority_tag=str(priority_tag).upper())
     projects.append(new_project)
-@bot.command(name = "project_list")
+@bot.command(name = "project_list") 
 async def get_project_list(ctx):
     """ Function to get the project list for a particular server"""
 
@@ -52,18 +52,6 @@ async def get_project_list(ctx):
         temp_project = projects[i]
         embed.add_field(name = str(temp_project.get_name), value= str(temp_project.get_project_manager), inline= True)
     await ctx.send(embed=embed)
-
-# @bot.command(name = "add_manager")
-# async def add_project_manager(ctx):
-#     """Function that adds a manager to an already existing project"""
-#     await ctx.send("Please choose a project from the following list to add a manager to:")
-#     get_project_list(ctx)
-#     try:
-#         project = await bot.wait_for("message", timeout=60, 
-#                         check= lambda message : message.author == ctx.author 
-#                         and message.channel == ctx.channel #lambda function 
-#                                 #to make sure that the message received is by the author within the same channel
-#         )
 
 async def input(ctx):
     try:
