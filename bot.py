@@ -22,35 +22,39 @@ async def new_project(ctx):
     new_project_name = await input(ctx)
     if new_project_name:
         await ctx.send("New Project Created: " + new_project_name.content)
-        #await asyncio.sleep(3)
+        await asyncio.sleep(0.5)
         await ctx.send("The project needs a manager, doesn't it? Appoint one!")
         project_manager = await input(ctx)
         if project_manager:
             await ctx.send(project_manager.content + " has been appointed as the project manager for " + new_project_name.content)   
-            #await asyncio.sleep(3)
+            await asyncio.sleep(0.5)
             await ctx.send("The project needs some members. Just tag the members you would like to add!")
             members = await input(ctx)
             if members:
                 await ctx.send(members.content + " has been appointed as the members for the project: " + new_project_name.content)   
-                #await asyncio.sleep(3)
+                await asyncio.sleep(0.5)
                 await ctx.send("Finally, let's attach a priority tag to the project! Choose from high, medium, or low.")
                 priority_tag = await input(ctx)
                 if priority_tag:
                     await ctx.send(new_project_name.content + "project has been appointed " + (str(priority_tag.content)).upper() + " priority tag.")   
-                    #await asyncio.sleep(3)
+                    await asyncio.sleep(0.5)
                     await ctx.send("The project has been created!")
             
 
-    new_project = Project(name = new_project_name.content, project_manager= project_manager.content, members = members.content, priority_tag=str(priority_tag).upper())
+    new_project = Project(name = new_project_name, project_manager= project_manager, members = members, priority_tag=str(priority_tag).upper())
     projects.append(new_project)
-@bot.command(name = "project_list") 
+    await ctx.guild.create_text_channel(new_project_name)
+@bot.command(name = "project_list")
 async def get_project_list(ctx):
     """ Function to get the project list for a particular server"""
 
     embed=discord.Embed(title="Project List", description = "Here's the list of projects going on:")
+    embed.add_field(name = "Project Name ", value = "Project Manager", inline = True)
     for i in range(len(projects)):
         temp_project = projects[i]
-        embed.add_field(name = str(temp_project.get_name), value= str(temp_project.get_project_manager), inline= True)
+        name = temp_project.get_name().content
+        value = temp_project.get_project_manager().content
+        embed.add_field(name = name, value = value, inline= True)
     await ctx.send(embed=embed)
 
 async def input(ctx):
