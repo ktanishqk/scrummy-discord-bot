@@ -1,1 +1,1 @@
-worker: python scrummy-discord-bot/bot.py
+worker: python bot.py
