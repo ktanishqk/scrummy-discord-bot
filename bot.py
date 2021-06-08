@@ -3,7 +3,6 @@ import discord.ext
 from discord.ext import commands
 from discord.ext.commands import MemberConverter
 import asyncio
-from enum import Enum
 
 # Initializing the variables required for the bot
 
@@ -11,12 +10,12 @@ priority_tag_list = ['HIGH', 'LOW', 'MEDIUM']
 projects = []
 bot = commands.Bot(command_prefix='!')
 
-@bot.command(name="start")
+@bot.command(name="hello")
 async def start_bot(ctx):
     """ Start function that uses the !start command to begin the bot within the server. """
     await ctx.send("Hey, I am here. What's up?")
 
-@bot.command(name="new")
+@bot.command(name="new_project")
 async def new_project_func(ctx):
     """ New Project function intializes a new project within the server. """
     await ctx.send("Alright, let's start a new project. \nGo ahead and give the new project a name!")
@@ -53,12 +52,13 @@ async def get_project_list(ctx):
     """ Function to get the project list for a particular server"""
 
     embed=discord.Embed(title="Project List", description = "Here's the list of projects going on:")
-    embed.add_field(name = "Project Name: ", value = "Project Manager: ", inline = True)
+    embed.insert_field_at(index = 2, name = "Project Name: ", value = "Project Manager: ", inline = True)
     for i in range(len(projects)):
         temp_project = projects[i]
         name = temp_project.get_name().content
         value = temp_project.get_project_manager().content
-        embed.add_field(name = name, value = value, inline= True)
+        
+        embed.add_field(name = name, value = value, inline= True, )
     await ctx.send(embed=embed)
 
 async def input(ctx):

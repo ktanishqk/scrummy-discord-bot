@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 import discord.ext
+from enum import Enum
 
 class Project:
     def __init__(self, name, project_manager, members, priority_tag):
