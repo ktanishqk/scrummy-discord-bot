@@ -62,6 +62,10 @@ async def get_project_list(ctx):
     await ctx.send(embed=embed)
 
 async def input(ctx):
+    """ A helper function which takes the input from the channel.
+
+        Throws:
+         a Timeout error if the input is sent after a 60"""
     try:
         input_message = await bot.wait_for(
                 "message", 
