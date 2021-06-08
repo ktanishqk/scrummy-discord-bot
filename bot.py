@@ -7,6 +7,7 @@ from enum import Enum
 
 # Initializing the variables required for the bot
 
+priority_tag_list = ['HIGH', 'LOW', 'MEDIUM']
 projects = []
 bot = commands.Bot(command_prefix='!')
 
@@ -16,7 +17,7 @@ async def start_bot(ctx):
     await ctx.send("Hey, I am here. What's up?")
 
 @bot.command(name="new")
-async def new_project(ctx):
+async def new_project_func(ctx):
     """ New Project function intializes a new project within the server. """
     await ctx.send("Alright, let's start a new project. \nGo ahead and give the new project a name!")
     new_project_name = await input(ctx)
@@ -36,20 +37,23 @@ async def new_project(ctx):
                 await ctx.send("Finally, let's attach a priority tag to the project! Choose from high, medium, or low.")
                 priority_tag = await input(ctx)
                 if priority_tag:
-                    await ctx.send(new_project_name.content + "project has been appointed " + (str(priority_tag.content)).upper() + " priority tag.")   
-                    await asyncio.sleep(0.5)
-                    await ctx.send("The project has been created!")
-            
+                    if (priority_tag.content).upper() in priority_tag_list:
+                        await ctx.send(new_project_name.content + "project has been appointed " + (str(priority_tag.content)).upper() + " priority tag.")
+                        await asyncio.sleep(0.5)
+                        await ctx.send("The project has been created!")
+                    else:
+                        await ctx.send("Now, I'm just a bot but that doesn't look like a priority tag to me. Let's try again?")
+                        await new_project_func(ctx)    
 
-    new_project = Project(name = new_project_name, project_manager= project_manager, members = members, priority_tag=str(priority_tag).upper())
-    projects.append(new_project)
-    await ctx.guild.create_text_channel(new_project_name)
+    new_project_function = Project(name = new_project_name, project_manager= project_manager, members = members, priority_tag=str(priority_tag).upper())
+    projects.append(new_project_function)
+    await ctx.guild.create_text_channel(new_project_name.content)
 @bot.command(name = "project_list")
 async def get_project_list(ctx):
     """ Function to get the project list for a particular server"""
 
     embed=discord.Embed(title="Project List", description = "Here's the list of projects going on:")
-    embed.add_field(name = "Project Name ", value = "Project Manager", inline = True)
+    embed.add_field(name = "Project Name: ", value = "Project Manager: ", inline = True)
     for i in range(len(projects)):
         temp_project = projects[i]
         name = temp_project.get_name().content
